@@ -20,6 +20,9 @@ v add React to the frontend, remove the backend
 https://github.com/neu-se/spring-26-react
 ```
 
+The functional content of this project is a minimal transcript service with
+tests.
+
 ## Base configuration
 
 ### NPM Scripts
@@ -42,8 +45,8 @@ When appropriate, projects should also have the following scripts:
 
 ### ESLint
 
-This base project has an opinionated eslint configuration that heavily relies
-on typescript-eslint.
+This base project has an opinionated ESLint configuration that relies on
+[typed linting](https://typescript-eslint.io/getting-started/typed-linting).
 
 - Frontend code is code that lives in `./frontend` or `./client`. This code
   supports a few different naming conventions, as suitable for React.
@@ -53,7 +56,8 @@ on typescript-eslint.
   and eslint all follow this convention) and can import devDependencies,
   unlike other code. (Note that this means we're not using TypeScript to check
   our config files.)
-- Everything except for `no-console` and `prettier` is registered as `error`.
+- Most everything except for `no-console` and `prettier` should registered as
+  `error`; it's distracting in practice to have these be red squigglies
 
 ### Prettier
 
