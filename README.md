@@ -58,6 +58,22 @@ This base project has an opinionated ESLint configuration that relies on
 - Most everything except for `no-console` and `prettier` should registered as
   `error`; it's distracting in practice to have these be red squigglies
 
+### Minimalism, Mostly
+
+Project configuration should be minimal, and deviations from this principle
+should be justified and ideally documented. Notable exceptions are:
+
+- `.gitignore`, which takes a kitchen-sink approach and should freely accept
+  additions (for example, if a student accidentally checks in a file that
+  could have been ignored)
+- The ESLint configuration, which is a maximalist approach at trying to keep
+  new TypeScript programmers on the rails in a complicated codebase, and also
+  giving them a sense of working inside style conventions of a project that
+  may differ from their own. (Rob has told students we banned `i++` with the
+  `noPlusPlus` just to give them the experience of being annoyed by the style
+  guide of a company they're working for. He may or may not have been
+  kidding.)
+
 ### TypeScript
 
 TypeScript in the project is configured with options that support
@@ -74,8 +90,13 @@ enables:
 ### Prettier
 
 Includes a `.prettierrc` file with some reasonable settings and a
-`.vscode/settings.json` file that sets javascript, typescript, and json files
-to use the prettier editor as the default.
+`.vscode/settings.json` file sets javascript, typescript, and json files to
+use the prettier editor as the default.
+
+NOTE 2026-01: In the future, this file could be made more minimal and
+default-tuned in keeping with the minimalist principles: there's not an
+obvious need to use non-default options for `jsxSingleQuote`, `quoteProps`,
+`singleQuote`, `arrowParens`, and `bracketSameLine`.
 
 ### LF Line Endings
 
