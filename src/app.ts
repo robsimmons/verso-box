@@ -9,11 +9,11 @@ app.use(express.json());
 const db = new TranscriptDB();
 
 /* Handle API requests to create a new student record */
-const zAddStudentBody = z.object({
-  password: z.string(),
-  studentName: z.string(),
+const zBuildRequest = z.object({
+  projectId: z.string(),
+  fileContents: z.string(),
 });
-app.post("/api/addStudent", (req, res) => {
+app.post("/verso-box/api/build", (req, res) => {
   const body = zAddStudentBody.safeParse(req.body);
   if (!body.success) {
     res.status(400).send({ error: "Poorly-formed request" });
