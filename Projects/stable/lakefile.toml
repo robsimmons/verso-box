@@ -1,0 +1,15 @@
+name = "lean-nightly"
+version = "0.1.0"
+defaultTargets = ["lean-nightly"]
+
+[[lean_lib]]
+name = "TheLeanFile"
+
+[[require]]
+name = "verso"
+git = "https://github.com/leanprover/verso"
+rev = "v4.27.0"
+
+[[lean_exe]]
+name = "mkdoc"
+root = "Main"

@@ -128,9 +128,14 @@ reports/
 playwright-report/
 test-results/
 
+git# Lean
+.lake
+_out
+
 # JetBrains
 .idea
 
 # misc
 client/build
 .DS_Store
+

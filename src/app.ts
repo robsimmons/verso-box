@@ -1,70 +1,49 @@
 import express from "express";
 import { z } from "zod";
-import { checkPassword } from "./auth.service.ts";
-import { TranscriptDB } from "./transcript.service.ts";
-import type { Transcript } from "./types.ts";
+import { writeFileSync } from "node:fs";
+import { join } from "node:path";
+import { spawn } from "child_process";
 
 export const app = express();
 app.use(express.json());
-const db = new TranscriptDB();
+
+const PROJ_PATH = process.env.PROJ_PATH || join("Projects", "stable");
 
 /* Handle API requests to create a new student record */
 const zBuildRequest = z.object({
   projectId: z.string(),
   fileContents: z.string(),
 });
-app.post("/verso-box/api/build", (req, res) => {
-  const body = zAddStudentBody.safeParse(req.body);
+app.post("/api/singlepage", (req, res) => {
+  const body = zBuildRequest.safeParse(req.body);
   if (!body.success) {
     res.status(400).send({ error: "Poorly-formed request" });
-  } else if (!checkPassword(body.data.password)) {
-    res.status(403).send({ error: "Invalid credentials" });
   } else {
-    const id = db.addStudent(body.data.studentName);
-    res.send({ studentID: id });
+    const theLeanFile = join(PROJ_PATH, "TheLeanFile.lean");
+    writeFileSync(theLeanFile, body.data.fileContents);
+
+    const subprocess = spawn("lake", ["exe", "mkdoc"], { cwd: PROJ_PATH });
+    const output: string[] = [];
+    subprocess.on("data", (data) => {
+      output.push(`${data}`);
+    });
+    subprocess.on("error", (data) => {
+      output.push(`<|${data}|>}`);
+    });
+    subprocess.on("exit", () => {
+      res.send({
+        success: true,
+        output: output.join(""),
+        href: "/verso/view",
+      });
+    });
+    subprocess.on("error", () => {
+      res.send({
+        success: false,
+        output: output.join(""),
+      });
+    });
   }
 });
 
-/* Handle API requests to add a grade to a student */
-const zAddGradeBody = z.object({
-  password: z.string(),
-  studentID: z.int().gte(0),
-  courseName: z.string(),
-  courseGrade: z.number().gte(0).lte(100),
-});
-app.post("/api/addGrade", (req, res) => {
-  try {
-    const body = zAddGradeBody.parse(req.body);
-    if (!checkPassword(body.password)) {
-      res.status(403).send({ error: "Invalid credentials" });
-    } else {
-      db.addGrade(body.studentID, body.courseName, body.courseGrade);
-      res.send({ success: true });
-    }
-  } catch (e) {
-    res.status(400).send({ error: "Poorly-formed request" });
-  }
-});
-
-/* Handle API requests to retrieve a student transcript */
-const zGetTranscriptBody = z.object({
-  password: z.string(),
-  studentID: z.int().gte(0),
-});
-app.post("/api/getTranscript", (req, res) => {
-  const body = zGetTranscriptBody.safeParse(req.body);
-  if (!body.success) {
-    res.status(400).send({ error: "Poorly-formed request" });
-  } else if (!checkPassword(body.data.password)) {
-    res.status(403).send({ error: "Invalid credentials" });
-  } else {
-    let response: { success: true; transcript: Transcript } | { success: false };
-    try {
-      const transcript = db.getTranscript(body.data.studentID);
-      response = { success: true, transcript };
-    } catch {
-      response = { success: false };
-    }
-    res.send(response);
-  }
-});
+app.use("/view", express.static(join(PROJ_PATH, "_out", "html-single")));
