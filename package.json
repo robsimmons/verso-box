@@ -4,15 +4,15 @@
   "description": "CS4530 Template",
   "type": "module",
   "scripts": {
-    "check": "tsc",
+    "check": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prettier": "prettier --check .",
     "prettier:fix": "prettier --write .",
     "test": "vitest run --coverage",
     "dev": "node --watch ./src/server.ts",
-    "build": "echo 'nothing to do to build, run `npm start`'",
-    "start": "MODE=production node ./src/server.ts"
+    "build": "tsc",
+    "start": "MODE=production node ./src/server.js"
   },
   "author": "Rob Simmons",
   "devDependencies": {

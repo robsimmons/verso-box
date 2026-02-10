@@ -8,8 +8,8 @@
 
     /* Support the use of type stripping in Node */
     "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
     "erasableSyntaxOnly": true,
-    "noEmit": true,
     "verbatimModuleSyntax": true,
 
     /* Linting */
