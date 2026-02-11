@@ -25,7 +25,7 @@ app.post("/verso/api/singlepage", (req, res) => {
     rmSync(join(PROJ_PATH, "_out"), { recursive: true, force: true });
     const subprocess = spawn(LAKE_BIN, ["exe", "mkdoc"], {
       cwd: PROJ_PATH,
-      env: { LAKE: "/no" },
+      env: { LAKE: "/no", PATH: process.env.PATH },
     });
     const output: string[] = [];
     subprocess.stdout.on("data", (data) => {
