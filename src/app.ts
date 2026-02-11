@@ -1,6 +1,6 @@
 import express from "express";
 import { z } from "zod";
-import { writeFileSync } from "node:fs";
+import { rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { spawn } from "child_process";
 
@@ -22,7 +22,7 @@ app.post("/verso/api/singlepage", (req, res) => {
   } else {
     const theLeanFile = join(PROJ_PATH, "TheLeanFile.lean");
     writeFileSync(theLeanFile, body.data.fileContents);
-
+    rmSync(join(PROJ_PATH, "_out"), { recursive: true, force: true });
     const subprocess = spawn(LAKE_BIN, ["exe", "mkdoc"], { cwd: PROJ_PATH });
     const output: string[] = [];
     subprocess.on("data", (data) => {
