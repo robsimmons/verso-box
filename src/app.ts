@@ -23,7 +23,10 @@ app.post("/verso/api/singlepage", (req, res) => {
     const theLeanFile = join(PROJ_PATH, "TheLeanFile.lean");
     writeFileSync(theLeanFile, body.data.fileContents);
     rmSync(join(PROJ_PATH, "_out"), { recursive: true, force: true });
-    const subprocess = spawn(LAKE_BIN, ["exe", "mkdoc"], { cwd: PROJ_PATH });
+    const subprocess = spawn(LAKE_BIN, ["exe", "mkdoc"], {
+      cwd: PROJ_PATH,
+      env: { LAKE: "/no" },
+    });
     const output: string[] = [];
     subprocess.stdout.on("data", (data) => {
       output.push(`${data}`);
