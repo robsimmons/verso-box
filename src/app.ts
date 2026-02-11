@@ -25,22 +25,24 @@ app.post("/verso/api/singlepage", (req, res) => {
     rmSync(join(PROJ_PATH, "_out"), { recursive: true, force: true });
     const subprocess = spawn(LAKE_BIN, ["exe", "mkdoc"], { cwd: PROJ_PATH });
     const output: string[] = [];
-    subprocess.on("data", (data) => {
+    subprocess.stdout.on("data", (data) => {
       output.push(`(|${data}|)`);
     });
-    subprocess.on("error", (data) => {
+    subprocess.stdout.on("data", (data) => {
       output.push(`<|${data}|>}`);
     });
-    subprocess.on("exit", () => {
+    subprocess.on("exit", (data) => {
       res.send({
         success: true,
+        result: `${data}`,
         output: output.join(""),
         href: "/verso/view",
       });
     });
-    subprocess.on("error", () => {
+    subprocess.on("error", (data) => {
       res.send({
         success: false,
+        result: `${data}`,
         output: output.join(""),
       });
     });
