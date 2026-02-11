@@ -14,7 +14,7 @@ const zBuildRequest = z.object({
   projectId: z.string(),
   fileContents: z.string(),
 });
-app.post("/api/singlepage", (req, res) => {
+app.post("/verso/api/singlepage", (req, res) => {
   const body = zBuildRequest.safeParse(req.body);
   if (!body.success) {
     res.status(400).send({ error: "Poorly-formed request" });
@@ -46,4 +46,4 @@ app.post("/api/singlepage", (req, res) => {
   }
 });
 
-app.use("/view", express.static(join(PROJ_PATH, "_out", "html-single")));
+app.use("/verso/view", express.static(join(PROJ_PATH, "_out", "html-single")));
