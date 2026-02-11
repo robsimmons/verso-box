@@ -7,6 +7,7 @@ import { spawn } from "child_process";
 export const app = express();
 app.use(express.json());
 
+const LAKE_BIN = process.env.LAKE_BIN || "lake";
 const PROJ_PATH = process.env.PROJ_PATH || join("Projects", "stable");
 
 /* Handle API requests to create a new student record */
@@ -22,10 +23,10 @@ app.post("/verso/api/singlepage", (req, res) => {
     const theLeanFile = join(PROJ_PATH, "TheLeanFile.lean");
     writeFileSync(theLeanFile, body.data.fileContents);
 
-    const subprocess = spawn("lake", ["exe", "mkdoc"], { cwd: PROJ_PATH });
+    const subprocess = spawn(LAKE_BIN, ["exe", "mkdoc"], { cwd: PROJ_PATH });
     const output: string[] = [];
     subprocess.on("data", (data) => {
-      output.push(`${data}`);
+      output.push(`(|${data}|)`);
     });
     subprocess.on("error", (data) => {
       output.push(`<|${data}|>}`);
