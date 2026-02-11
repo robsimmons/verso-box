@@ -39,7 +39,7 @@ app.post("/verso/api/singlepage", (req, res) => {
       if (finished) return;
       res.send({
         result: `${data}`,
-        output: output.join(""),
+        output: output,
         href: "/verso/view",
       });
     });
@@ -48,7 +48,7 @@ app.post("/verso/api/singlepage", (req, res) => {
       res.send({
         success: false,
         result: `${data}`,
-        output: output.join(""),
+        output: output,
       });
     });
   }
