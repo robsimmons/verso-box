@@ -2,7 +2,7 @@ import express from "express";
 import { z } from "zod";
 import { rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { spawn } from "child_process";
+import { spawn } from "node:child_process";
 
 export const app = express();
 app.use(express.json());
@@ -26,20 +26,22 @@ app.post("/verso/api/singlepage", (req, res) => {
     const subprocess = spawn(LAKE_BIN, ["exe", "mkdoc"], { cwd: PROJ_PATH });
     const output: string[] = [];
     subprocess.stdout.on("data", (data) => {
-      output.push(`(|${data}|)`);
+      output.push(`${data}`);
     });
-    subprocess.stdout.on("data", (data) => {
-      output.push(`<|${data}|>}`);
+    subprocess.stderr.on("data", (data) => {
+      output.push(`${data}`);
     });
-    subprocess.on("exit", (data) => {
+    let finished = false;
+    subprocess.on("close", (data) => {
+      if (finished) return;
       res.send({
-        success: true,
         result: `${data}`,
         output: output.join(""),
         href: "/verso/view",
       });
     });
     subprocess.on("error", (data) => {
+      finished = true;
       res.send({
         success: false,
         result: `${data}`,
