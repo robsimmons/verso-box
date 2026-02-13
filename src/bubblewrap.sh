@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 ulimit -t 120
 
 PROJECT="$(realpath "$1")"  # resolve symlinks                                                                                                                  
