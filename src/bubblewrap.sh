@@ -23,7 +23,7 @@ exec bwrap \
     --tmpfs /tmp \
     --proc /proc \
     --clearenv	\
-    --setenv PATH "/lean/bin:$(dirname $(which dirname)):$(dirname $(which git))" \
+    --setenv PATH "$PATH" \
     --unshare-user \
     --unshare-pid  \
     --unshare-net  \
@@ -32,3 +32,5 @@ exec bwrap \
     --die-with-parent \
     --chdir /project \
     /lean/bin/lake --old --keep-toolchain exe mkdoc
+
+# "/lean/bin:$(dirname $(which dirname)):$(dirname $(which git))" \
