@@ -19,7 +19,7 @@ app.post("/verso/api/singlepage", (req, res) => {
   if (!body.success) {
     res.status(400).send({ error: "Poorly-formed request" });
   } else {
-    const theLeanFile = join(PROJ_PATH, "TheLeanFile.lean");
+    const theLeanFile = join(PROJ_PATH, body.data.projectId, "TheLeanFile.lean");
     writeFileSync(theLeanFile, body.data.fileContents);
     // const subprocess = spawn(LAKE_BIN, ["exe", "mkdoc"], {
     const subprocess = spawn(
