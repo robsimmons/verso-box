@@ -21,7 +21,6 @@ app.post("/verso/api/singlepage", (req, res) => {
   } else {
     const theLeanFile = join(PROJ_PATH, "TheLeanFile.lean");
     writeFileSync(theLeanFile, body.data.fileContents);
-    rmSync(join(PROJ_PATH, "_out"), { recursive: true, force: true });
     // const subprocess = spawn(LAKE_BIN, ["exe", "mkdoc"], {
     const subprocess = spawn(
       join(import.meta.dirname, "bubblewrap.sh"),
