@@ -7,8 +7,8 @@ shift
 
 LEAN_ROOT="$(cd $PROJECT && lean --print-prefix)"
 
-mkdir -p _bwrap_out
-rm -rf _bwrap_out/*
+mkdir -p ~/_bwrap_out
+rm -rf ~/_bwrap_out/*
 
 exec bwrap \
     --ro-bind /nix /nix \
@@ -18,7 +18,7 @@ exec bwrap \
     --proc /propc \
     --ro-bind "$PROJECT" /project \
     --ro-bind "$LEAN_ROOT" /lean \
-    --bind ./_bwrap_out /project/_out \
+    --bind ~/_bwrap_out /project/_out \
     --tmpfs /project/.lake/build \
     --tmpfs /tmp \
     --proc /proc \
