@@ -57,4 +57,4 @@ app.post("/verso/api/singlepage", (req, res) => {
   }
 });
 
-app.use("/verso/view", express.static(join(PROJ_PATH, "_out", "html-single")));
+app.use("/verso/view", express.static(join(process.env.HOME ?? "~", "_bwrap_out", "html-single")));
