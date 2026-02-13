@@ -7,12 +7,11 @@ import { spawn } from "node:child_process";
 export const app = express();
 app.use(express.json());
 
-const LAKE_BIN = process.env.LAKE_BIN || "lake";
-const PROJ_PATH = process.env.PROJ_PATH || join("Projects", "stable");
+const PROJ_PATH = process.env.PROJ_PATH || "Projects";
 
 /* Handle API requests to create a new student record */
 const zBuildRequest = z.object({
-  projectId: z.string(),
+  projectId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9.]*$/),
   fileContents: z.string(),
 });
 app.post("/verso/api/singlepage", (req, res) => {
@@ -23,10 +22,15 @@ app.post("/verso/api/singlepage", (req, res) => {
     const theLeanFile = join(PROJ_PATH, "TheLeanFile.lean");
     writeFileSync(theLeanFile, body.data.fileContents);
     rmSync(join(PROJ_PATH, "_out"), { recursive: true, force: true });
-    const subprocess = spawn(LAKE_BIN, ["exe", "mkdoc"], {
-      cwd: PROJ_PATH,
-      env: { LAKE: "/no", PATH: process.env.PATH },
-    });
+    // const subprocess = spawn(LAKE_BIN, ["exe", "mkdoc"], {
+    const subprocess = spawn(
+      join(import.meta.dirname, "bubblewrap.sh"),
+      [join(PROJ_PATH, body.data.projectId)],
+      {
+        cwd: PROJ_PATH,
+        env: { LAKE: "/no", PATH: process.env.PATH },
+      },
+    );
     const output: string[] = [];
     subprocess.stdout.on("data", (data) => {
       output.push(`${data}`);

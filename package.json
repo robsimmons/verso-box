@@ -10,7 +10,7 @@
     "prettier": "prettier --check .",
     "prettier:fix": "prettier --write .",
     "test": "vitest run --coverage",
-    "dev": "node --watch ./src/server.ts",
+    "dev": "PORT=8934 node --watch ./src/server.ts",
     "build": "tsc",
     "start": "MODE=production node ./src/server.js"
   },
