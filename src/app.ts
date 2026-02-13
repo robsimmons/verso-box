@@ -27,7 +27,7 @@ app.post("/verso/api/singlepage", (req, res) => {
       [join(PROJ_PATH, body.data.projectId)],
       {
         cwd: PROJ_PATH,
-        env: { LAKE: "/no", PATH: process.env.PATH },
+        // env: { LAKE: "/no", PATH: process.env.PATH },
       },
     );
     const output: string[] = [];
