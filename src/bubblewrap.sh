@@ -18,7 +18,7 @@ exec bwrap \
     --proc /propc \
     --ro-bind "$PROJECT" /project \
     --ro-bind "$LEAN_ROOT" /lean \
-    --bind ~/_bwrap_out /project/_out \
+    --bind ~/_bwrap_out /_bwrap_out \
     --tmpfs /project/.lake/build \
     --tmpfs /tmp \
     --proc /proc \
